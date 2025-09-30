@@ -1,27 +1,19 @@
 Base Liquidity Mining Program
+
 📋 Project Description
+
 Base Liquidity Mining Program is a decentralized liquidity incentive program that rewards users for providing liquidity to various token pairs. The program incentivizes liquidity provision through token rewards and governance participation.
 
 🔧 Technologies Used
+
 Programming Language: Solidity 0.8.0
 Framework: Hardhat
 Network: Base Network
 Standards: ERC-20
 Libraries: OpenZeppelin
+
 🏗️ Project Architecture
 
-
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
 base-liquidity-mining/
 ├── contracts/
 │   ├── LiquidityMining.sol
@@ -33,40 +25,23 @@ base-liquidity-mining/
 ├── hardhat.config.js
 ├── package.json
 └── README.md
+
 🚀 Installation and Setup
+
 1. Clone the repository
-bash
-
-
-1
-2
-git clone https://github.com/yourusername/base-liquidity-mining.git
+git clone https://github.com/bipoliarochka/Base-Liquidity-Mining-Program.git
 cd base-liquidity-mining
 2. Install dependencies
-bash
-
-
-1
 npm install
 3. Compile contracts
-bash
-
-
-1
 npx hardhat compile
 4. Run tests
-bash
-
-
-1
 npx hardhat test
 5. Deploy to Base network
-bash
-
-
-1
 npx hardhat run scripts/deploy.js --network base
+
 💰 Features
+
 Core Functionality:
 ✅ Liquidity mining rewards
 ✅ Token distribution
@@ -74,6 +49,7 @@ Core Functionality:
 ✅ Liquidity provision
 ✅ Reward calculation
 ✅ Withdrawal functionality
+
 Advanced Features:
 Dynamic Reward Distribution - Variable reward rates based on liquidity
 Multi-Asset Mining - Mining for various token pairs
@@ -81,7 +57,9 @@ Staking Incentives - Long-term staking rewards
 Governance Participation - Governance token rewards
 Performance Analytics - Mining performance tracking
 Community Rewards - Community-based reward distribution
+
 🛠️ Smart Contract Functions
+
 Core Functions:
 stake(address token, uint256 amount) - Stake tokens for mining rewards
 unstake(address token, uint256 amount) - Withdraw staked tokens
@@ -89,6 +67,7 @@ claimRewards(address token) - Claim accumulated rewards
 depositLiquidity(address tokenA, address tokenB, uint256 amountA, uint256 amountB) - Deposit liquidity for mining
 withdrawLiquidity(address tokenA, address tokenB, uint256 liquidityAmount) - Withdraw liquidity
 calculateRewards(address user, address token) - Calculate pending rewards
+
 Events:
 Staked - Emitted when tokens are staked
 Unstaked - Emitted when tokens are unstaked
@@ -96,19 +75,11 @@ RewardsClaimed - Emitted when rewards are claimed
 LiquidityDeposited - Emitted when liquidity is deposited
 LiquidityWithdrawn - Emitted when liquidity is withdrawn
 RewardRateUpdated - Emitted when reward rate is updated
+
 📊 Contract Structure
+
 Mining Pool Structure:
-solidity
 
-
-1
-2
-3
-4
-5
-6
-7
-8
 struct MiningPool {
     address tokenA;
     address tokenB;
@@ -117,23 +88,18 @@ struct MiningPool {
     uint256 lastUpdateTime;
     uint256 accRewardPerLiquidity;
 }
+
 User Position:
-solidity
 
-
-1
-2
-3
-4
-5
-6
 struct UserPosition {
     uint256 liquidityAmount;
     uint256 rewardDebt;
     uint256 lastRewardUpdate;
     uint256 earnedRewards;
 }
+
 ⚡ Deployment Process
+
 Prerequisites:
 Node.js >= 14.x
 npm >= 6.x
@@ -144,12 +110,10 @@ Deployment Steps:
 Configure your hardhat.config.js with Base network settings
 Set your private key in .env file
 Run deployment script:
-bash
-
-
-1
 npx hardhat run scripts/deploy.js --network base
+
 🔒 Security Considerations
+
 Security Measures:
 Reentrancy Protection - Using OpenZeppelin's ReentrancyGuard
 Input Validation - Comprehensive input validation
