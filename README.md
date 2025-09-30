@@ -125,7 +125,9 @@ Audit Status:
 Initial security audit completed
 Formal verification in progress
 Community review underway
+
 📈 Performance Metrics
+
 Gas Efficiency:
 Stake operation: ~70,000 gas
 Unstake operation: ~60,000 gas
@@ -135,7 +137,9 @@ Liquidity withdrawal: ~90,000 gas
 Transaction Speed:
 Average confirmation time: < 2 seconds
 Peak throughput: 160+ transactions/second
+
 🔄 Future Enhancements
+
 Planned Features:
 Advanced Mining Models - Tiered mining rewards and complex incentive structures
 NFT Integration - NFT-based mining and rewards
@@ -143,26 +147,19 @@ Governance Participation - Governance token rewards for mining participants
 Cross-Chain Mining - Multi-chain liquidity mining
 Analytics Dashboard - Comprehensive mining performance analytics
 AI-Powered Optimization - Smart mining reward optimization
-🤝 Contributing
-We welcome contributions to improve the Base Liquidity Mining Program:
 
+🤝 Contributing
+
+We welcome contributions to improve the Base Liquidity Mining Program:
 Fork the repository
 Create your feature branch (git checkout -b feature/AmazingFeature)
 Commit your changes (git commit -m 'Add some AmazingFeature')
 Push to the branch (git push origin feature/AmazingFeature)
 Open a pull request
+
 📄 License
+
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-📞 Support
-For support, please open an issue on our GitHub repository or contact us at:
 
-Email: support@baseliquiditymining.com
-Twitter: @BaseLiquidityMining
-Discord: Base Liquidity Mining Community
-🌐 Links
-GitHub Repository: https://github.com/yourusername/base-liquidity-mining
-Base Network: https://base.org
-Documentation: https://docs.baseliquiditymining.com
-Community Forum: https://community.baseliquiditymining.com
 Built with ❤️ on Base Network
