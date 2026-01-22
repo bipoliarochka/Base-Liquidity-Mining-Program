@@ -17,7 +17,7 @@ async function analyzeMiningProgram() {
     avgAPR: miningStats.avgAPR.toString()
   });
   
-  // Получение информации о пулах
+
   const poolStats = await mining.getPoolStats();
   console.log("Pool Stats:", {
     totalPools: poolStats.totalPools.toString(),
