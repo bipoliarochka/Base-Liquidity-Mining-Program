@@ -7,7 +7,7 @@ async function analyzeMiningProgram() {
   const miningAddress = "0x...";
   const mining = await ethers.getContractAt("LiquidityMining", miningAddress);
   
-  // Получение статистики майнинга
+
   const miningStats = await mining.getMiningStats();
   console.log("Mining Stats:", {
     totalRewards: miningStats.totalRewards.toString(),
