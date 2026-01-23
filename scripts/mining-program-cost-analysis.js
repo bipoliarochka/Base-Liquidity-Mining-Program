@@ -31,7 +31,7 @@ async function analyzeMiningProgramCosts() {
       totalCost: costBreakdown.totalCost.toString()
     };
     
-    // Метрики эффективности
+
     const efficiencyMetrics = await mining.getEfficiencyMetrics();
     costReport.efficiencyMetrics = {
       costPerMiner: efficiencyMetrics.costPerMiner.toString(),
