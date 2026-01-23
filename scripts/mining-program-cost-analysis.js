@@ -8,7 +8,7 @@ async function analyzeMiningProgramCosts() {
   const miningAddress = "0x...";
   const mining = await ethers.getContractAt("LiquidityMining", miningAddress);
   
-  // Анализ затрат
+
   const costReport = {
     timestamp: new Date().toISOString(),
     miningAddress: miningAddress,
