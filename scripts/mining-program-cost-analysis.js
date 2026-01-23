@@ -20,7 +20,7 @@ async function analyzeMiningProgramCosts() {
   };
   
   try {
-    // Разбивка затрат
+
     const costBreakdown = await mining.getCostBreakdown();
     costReport.costBreakdown = {
       developmentCost: costBreakdown.developmentCost.toString(),
