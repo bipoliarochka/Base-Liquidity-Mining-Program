@@ -84,3 +84,4 @@ contract AdvancedToken is ERC20, Ownable {
         return (userType, typeInfo);
     }
 }
+ 
