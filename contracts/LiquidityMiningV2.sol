@@ -20,8 +20,8 @@ contract LiquidityMiningV2 is Ownable, ReentrancyGuard {
         uint256 poolStartTime;
         uint256 poolEndTime;
         bool isActive;
-        uint256 poolType; // 0 = classic, 1 = concentrated, 2 = stable
-        uint256 feeTier; // 0 = 0.3%, 1 = 0.5%, 2 = 1%
+        uint256 poolType; 
+        uint256 feeTier; 
         uint256 priceImpact;
         uint256 minStake;
         uint256 maxStake;
