@@ -225,3 +225,238 @@ contract LiquidityMiningV2 is Ownable, ReentrancyGuard {
             // Apply fee
             if (feeAmount > 0) {
                 pool.token.transfer(owner(), feeAmount);
+        // Добавить структуры:
+struct NFTMiningTier {
+    string tierName;
+    uint256 minStake;
+    uint256 rewardMultiplier;
+    uint256 bonusPercentage;
+    uint256 maxStake;
+    bool enabled;
+    uint256 maxUsers;
+    uint256 currentUsers;
+    uint256 maxRewardsPerDay;
+    uint256 dailyRewards;
+    uint256 lastResetTime;
+}
+
+struct NFTMiningPosition {
+    uint256 tokenId;
+    address staker;
+    address nftContract;
+    uint256 stakeTime;
+    uint256 miningDuration;
+    bool isMining;
+    string miningTier;
+    uint256 rewardMultiplier;
+    uint256 miningPower;
+    uint256 lastRewardTime;
+    uint256 totalRewardsEarned;
+    uint256 stakedAmount;
+    uint256 dailyStake;
+    uint256 lastDailyReset;
+}
+
+// Добавить маппинги:
+mapping(string => NFTMiningTier) public nftMiningTiers;
+mapping(address => mapping(uint256 => NFTMiningPosition)) public nftMiningPositions;
+mapping(address => uint256[]) public userNFTMiningPositions;
+
+// Добавить события:
+event NFTMiningTierCreated(
+    string indexed tierName,
+    uint256 minStake,
+    uint256 rewardMultiplier,
+    uint256 bonusPercentage,
+    uint256 maxStake
+);
+
+event NFTMiningStarted(
+    address indexed staker,
+    address indexed nftContract,
+    uint256 tokenId,
+    string miningTier,
+    uint256 miningPower,
+    uint256 timestamp
+);
+
+event NFTMiningEnded(
+    address indexed staker,
+    address indexed nftContract,
+    uint256 tokenId,
+    uint256 rewards,
+    uint256 timestamp
+);
+
+event NFTMiningTierUpdated(
+    string indexed tierName,
+    uint256 minStake,
+    uint256 rewardMultiplier,
+    uint256 bonusPercentage
+);
+
+// Добавить функции:
+function createNFTMiningTier(
+    string memory tierName,
+    uint256 minStake,
+    uint256 rewardMultiplier,
+    uint256 bonusPercentage,
+    uint256 maxStake,
+    uint256 maxUsers,
+    uint256 maxRewardsPerDay
+) external onlyOwner {
+    require(bytes(tierName).length > 0, "Tier name cannot be empty");
+    require(minStake <= maxStake, "Invalid stake limits");
+    require(rewardMultiplier >= 1000, "Reward multiplier too low");
+    require(bonusPercentage <= 10000, "Bonus percentage too high");
+    
+    nftMiningTiers[tierName] = NFTMiningTier({
+        tierName: tierName,
+        minStake: minStake,
+        rewardMultiplier: rewardMultiplier,
+        bonusPercentage: bonusPercentage,
+        maxStake: maxStake,
+        enabled: true,
+        maxUsers: maxUsers,
+        currentUsers: 0,
+        maxRewardsPerDay: maxRewardsPerDay,
+        dailyRewards: 0,
+        lastResetTime: block.timestamp
+    });
+    
+    emit NFTMiningTierCreated(tierName, minStake, rewardMultiplier, bonusPercentage, maxStake);
+}
+
+function updateNFTMiningTier(
+    string memory tierName,
+    uint256 minStake,
+    uint256 rewardMultiplier,
+    uint256 bonusPercentage
+) external onlyOwner {
+    require(nftMiningTiers[tierName].tierName.length > 0, "Tier not found");
+    require(minStake <= nftMiningTiers[tierName].maxStake, "Invalid stake limits");
+    require(rewardMultiplier >= 1000, "Reward multiplier too low");
+    require(bonusPercentage <= 10000, "Bonus percentage too high");
+    
+    NFTMiningTier storage tier = nftMiningTiers[tierName];
+    tier.minStake = minStake;
+    tier.rewardMultiplier = rewardMultiplier;
+    tier.bonusPercentage = bonusPercentage;
+    
+    emit NFTMiningTierUpdated(tierName, minStake, rewardMultiplier, bonusPercentage);
+}
+
+function startNFTMining(
+    address nftContract,
+    uint256 tokenId,
+    string memory miningTier,
+    uint256 miningPower
+) external {
+    require(nftMiningTiers[miningTier].tierName.length > 0, "Invalid mining tier");
+    require(nftMiningTiers[miningTier].enabled, "Tier not enabled");
+    require(ownerOf(nftContract, tokenId) == msg.sender, "Not owner");
+    require(miningPower > 0, "Mining power must be greater than 0");
+    
+    // Check tier limits
+    NFTMiningTier storage tier = nftMiningTiers[miningTier];
+    require(tier.currentUsers < tier.maxUsers, "Tier full");
+    
+    // Check daily rewards
+    if (block.timestamp >= tier.lastResetTime + 86400) {
+        tier.dailyRewards = 0;
+        tier.lastResetTime = block.timestamp;
+    }
+    
+    // Start mining
+    uint256 positionId = uint256(keccak256(abi.encodePacked(nftContract, tokenId, block.timestamp)));
+    
+    nftMiningPositions[nftContract][tokenId] = NFTMiningPosition({
+        tokenId: tokenId,
+        staker: msg.sender,
+        nftContract: nftContract,
+        stakeTime: block.timestamp,
+        miningDuration: 0,
+        isMining: true,
+        miningTier: miningTier,
+        rewardMultiplier: tier.rewardMultiplier,
+        miningPower: miningPower,
+        lastRewardTime: block.timestamp,
+        totalRewardsEarned: 0,
+        stakedAmount: 0,
+        dailyStake: 0,
+        lastDailyReset: block.timestamp
+    });
+    
+    // Update tier stats
+    tier.currentUsers++;
+    
+    // Transfer NFT to contract
+    transferFrom(msg.sender, address(this), nftContract, tokenId);
+    
+    userNFTMiningPositions[msg.sender].push(tokenId);
+    
+    emit NFTMiningStarted(msg.sender, nftContract, tokenId, miningTier, miningPower, block.timestamp);
+}
+
+function endNFTMining(
+    address nftContract,
+    uint256 tokenId
+) external {
+    NFTMiningPosition storage position = nftMiningPositions[nftContract][tokenId];
+    require(position.isMining, "NFT not mining");
+    require(position.staker == msg.sender, "Not staker");
+    
+    // Calculate rewards
+    uint256 rewards = calculateNFTMiningRewards(position);
+    
+    // Return NFT to user
+    transferFrom(address(this), msg.sender, nftContract, tokenId);
+    
+    // Transfer rewards
+    if (rewards > 0) {
+        // Transfer reward tokens
+    }
+    
+    // Update stats
+    position.isMining = false;
+    position.totalRewardsEarned += rewards;
+    
+    // Update tier stats
+    NFTMiningTier storage tier = nftMiningTiers[position.miningTier];
+    tier.currentUsers--;
+    
+    emit NFTMiningEnded(msg.sender, nftContract, tokenId, rewards, block.timestamp);
+}
+
+function calculateNFTMiningRewards(NFTMiningPosition memory position) internal view returns (uint256) {
+    // Simplified reward calculation
+    uint256 timeElapsed = block.timestamp - position.lastRewardTime;
+    uint256 baseReward = position.miningPower * position.rewardMultiplier / 1000;
+    uint256 timeBonus = timeElapsed / 3600; // Bonus per hour
+    uint256 totalReward = baseReward + (timeBonus * 100000000000000000); // 0.1 ETH per hour
+    
+    return totalReward;
+}
+
+function getNFTMiningTierInfo(string memory tierName) external view returns (NFTMiningTier memory) {
+    return nftMiningTiers[tierName];
+}
+
+function getNFTMiningPosition(address nftContract, uint256 tokenId) external view returns (NFTMiningPosition memory) {
+    return nftMiningPositions[nftContract][tokenId];
+}
+
+function getNFTMiningTiers() external view returns (string[] memory) {
+    // Implementation would return all tier names
+    return new string[](0);
+}
+
+function getNFTMiningStats() external view returns (
+    uint256 totalPositions,
+    uint256 activePositions,
+    uint256 totalRewards,
+    uint256 totalUsers
+) {
+    // Implementation would return mining statistics
+    return (0, 0, 0, 0);
+}
