@@ -367,7 +367,7 @@ function startNFTMining(
         tier.lastResetTime = block.timestamp;
     }
     
-    // Start mining
+
     uint256 positionId = uint256(keccak256(abi.encodePacked(nftContract, tokenId, block.timestamp)));
     
     nftMiningPositions[nftContract][tokenId] = NFTMiningPosition({
