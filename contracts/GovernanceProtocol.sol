@@ -164,4 +164,18 @@ contract GovernanceProtocol is Ownable, ReentrancyGuard {
     function getProposalInfo(uint256 proposalId) external view returns (Proposal memory) {
         return proposals[proposalId];
     }
+   
+function calculatePendingReward(address user, address token) public view returns (uint256) {
+    // Защита от переполнения
+    uint256 rewardPerToken = pool.rewardPerTokenStored;
+    uint256 userReward = userInfo[token][user].rewardDebt;
+    
+    if (userInfo[token][user].amount > 0) {
+        uint256 userEarned = userInfo[token][user].amount.mul(rewardPerToken.sub(userReward)).div(1e18);
+        // Защита от переполнения
+        require(userEarned <= type(uint256).max, "Reward calculation overflow");
+        return userEarned;
+    }
+    return 0;
+}
 }
