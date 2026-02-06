@@ -166,7 +166,7 @@ contract GovernanceProtocol is Ownable, ReentrancyGuard {
     }
    
 function calculatePendingReward(address user, address token) public view returns (uint256) {
-    // Защита от переполнения
+    
     uint256 rewardPerToken = pool.rewardPerTokenStored;
     uint256 userReward = userInfo[token][user].rewardDebt;
     
