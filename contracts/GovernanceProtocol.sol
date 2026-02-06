@@ -172,7 +172,7 @@ function calculatePendingReward(address user, address token) public view returns
     
     if (userInfo[token][user].amount > 0) {
         uint256 userEarned = userInfo[token][user].amount.mul(rewardPerToken.sub(userReward)).div(1e18);
-        // Защита от переполнения
+       
         require(userEarned <= type(uint256).max, "Reward calculation overflow");
         return userEarned;
     }
