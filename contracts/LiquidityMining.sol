@@ -2,9 +2,6 @@
 pragma solidity ^0.8.20;
 
 
-  - Stake LP token
-  - Rewards accrue, but claim vests linearly over vestDuration
-*/ 
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
