@@ -6,7 +6,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol"; 
  
 contract LiquidityMining is Ownable {
-    using SafeERC20 for IERC20;
+    using SafeERC20 for IERC20; 
 
     IERC20 public immutable lpToken;
     IERC20 public immutable rewardToken;
