@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-
-
-
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract LiquidityMining is Ownable, ReentrancyGuard {
@@ -26,9 +26,9 @@ contract LiquidityMining is Ownable, ReentrancyGuard {
     event Deposit(address indexed user, uint256 amount);
     event Withdraw(address indexed user, uint256 amount);
     event Claim(address indexed user, uint256 amount);
-
-    // Improvement: recovery
     event Recovered(address indexed token, address indexed to, uint256 amount);
+
+    event EmergencyWithdraw(address indexed user, uint256 amount);
 
     constructor(address _lp, address _reward, uint256 _rewardPerSecond) Ownable(msg.sender) {
         require(_lp != address(0) && _reward != address(0), "zero");
@@ -87,9 +87,23 @@ contract LiquidityMining is Ownable, ReentrancyGuard {
         require(pending > 0, "nothing");
 
         u.rewardDebt = (u.amount * accRewardPerShare) / 1e12;
-
         rewardToken.safeTransfer(msg.sender, pending);
         emit Claim(msg.sender, pending);
+    }
+
+    // Improvement
+    function emergencyWithdraw() external nonReentrant {
+        User storage u = users[msg.sender];
+        uint256 amount = u.amount;
+        require(amount > 0, "nothing staked");
+
+        u.amount = 0;
+        u.rewardDebt = 0;
+
+        totalStaked -= amount;
+        lpToken.safeTransfer(msg.sender, amount);
+
+        emit EmergencyWithdraw(msg.sender, amount);
     }
 
     function _updatePool() internal {
@@ -109,7 +123,6 @@ contract LiquidityMining is Ownable, ReentrancyGuard {
         return accrued - u.rewardDebt;
     }
 
-    // Improvement: recover stuck tokens (except core tokens)
     function recoverERC20(address token, address to, uint256 amount) external onlyOwner {
         require(token != address(lpToken), "no lp");
         require(token != address(rewardToken), "no reward");
