@@ -1,4 +1,4 @@
-// base-liquidity-mining/scripts/deploy.js
+
 const { ethers } = require("hardhat");
 
 async function main() {
