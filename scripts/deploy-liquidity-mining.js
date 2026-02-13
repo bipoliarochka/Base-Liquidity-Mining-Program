@@ -8,7 +8,7 @@ async function main() {
   console.log("Deploying contracts with the account:", deployer.address);
   console.log("Account balance:", (await deployer.getBalance()).toString());
 
-  // Деплой токенов
+
   const RewardToken = await ethers.getContractFactory("ERC20Token");
   const rewardToken = await RewardToken.deploy("Reward Token", "REWARD");
   await rewardToken.deployed();
