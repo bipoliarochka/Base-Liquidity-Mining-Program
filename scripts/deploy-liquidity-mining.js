@@ -17,7 +17,7 @@ async function main() {
   const stakingToken = await StakingToken.deploy("Staking Token", "STAKE");
   await stakingToken.deployed();
 
-  // Деплой Liquidity Mining контракта
+ 
   const LiquidityMining = await ethers.getContractFactory("LiquidityMining");
   const mining = await LiquidityMining.deploy(
     rewardToken.address,
