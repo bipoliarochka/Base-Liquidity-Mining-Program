@@ -31,7 +31,7 @@ async function main() {
   console.log("Reward Token deployed to:", rewardToken.address);
   console.log("Staking Token deployed to:", stakingToken.address);
   
-  // Сохраняем адреса
+
   const fs = require("fs");
   const data = {
     mining: mining.address,
