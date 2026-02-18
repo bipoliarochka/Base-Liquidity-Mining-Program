@@ -1,5 +1,5 @@
-require("dotenv").config();
-const fs = require("fs");
+require("dotenv").config(); 
+
 const path = require("path");
 
 async function main() {
