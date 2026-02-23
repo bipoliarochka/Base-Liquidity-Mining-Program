@@ -1,4 +1,4 @@
-  require("dotenv").config();
+require("dotenv").config();
 require("@nomicfoundation/hardhat-ethers");
 require("@nomicfoundation/hardhat-verify");
 
