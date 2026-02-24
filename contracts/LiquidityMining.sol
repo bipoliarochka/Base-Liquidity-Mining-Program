@@ -130,4 +130,7 @@ contract LiquidityMining is Ownable, ReentrancyGuard {
         IERC20(token).safeTransfer(to, amount);
         emit Recovered(token, to, amount);
     }
+    function setRewardPerSecond(uint256 newRate) external onlyOwner {
+    rewardPerSecond = newRate;
+}
 }
