@@ -132,5 +132,5 @@ contract LiquidityMining is Ownable, ReentrancyGuard {
     }
     function setRewardPerSecond(uint256 newRate) external onlyOwner {
     rewardPerSecond = newRate;
-}
+    }
 }
