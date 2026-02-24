@@ -25,7 +25,7 @@ async function analyzeMiningProgram() {
     totalRewardsDistributed: poolStats.totalRewardsDistributed.toString()
   });
   
-  // Получение информации о пользователях
+
   const userStats = await mining.getUserStats();
   console.log("User Stats:", {
     totalUsers: userStats.totalUsers.toString(),
