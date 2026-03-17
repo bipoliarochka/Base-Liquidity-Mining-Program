@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract LiquidityMining is Ownable, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
-    IERC20 public lpToken;
+    IERC20 public lpToken; 
     IERC20 public rewardToken;
 
     uint256 public rewardPerSecond;
